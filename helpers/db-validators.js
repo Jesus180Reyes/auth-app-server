@@ -18,9 +18,10 @@ const existeEmail = async (email)=> {
 }
 
 
+
 module.exports  = {
     existeUsuarioPorId,
-    existeEmail
+    existeEmail,
 }
 
  
