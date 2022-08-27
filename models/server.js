@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const { dbConecction } = require('../db/config');
 class Server {
 
     constructor() {
@@ -10,21 +11,21 @@ class Server {
         this.middlewares();
         // Path de usuarios
         this.paths = {
-            usuaerios: '/api/usuarios',
+            usuarios: '/api/usuarios',
       
         };
         // this.usuariosPath = '/api/usuarios';
         // this.authPath = '/api/auth';
         // Conectar a Base DE datos
-        // this.DbConecction();
+        this.DbConecction();
 
         // Rutas de la API
         this.routes();
 
     }
-    // async DbConecction() {
-    //     await dbConecction();
-    // }
+    async DbConecction() {
+        await dbConecction();
+    }
     middlewares() {
         // Cors
         // Parseo y lectura de datos de body
@@ -41,7 +42,7 @@ class Server {
     }
     routes() {
        
-        this.app.use(this.paths.usuaerios, require('../routes/usuarios'));
+        this.app.use(this.paths.usuarios, require('../routes/usuarios'));
     }
     listen() {
         this.app.listen(this.port, () => {
