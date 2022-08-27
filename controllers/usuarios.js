@@ -25,13 +25,6 @@ const postUsuarios = async(req, res = response)=> {
         const {nombre,email,password} = req.body;
 
         const usuario  = new Usuario({nombre,email,password});
-        const existeUsuario = await Usuario.findOne({email});
-        if(existeUsuario) {
-            return res.status(400).json({
-                ok:false,
-                msg: `El Usuario ${email} ya esta registrado`
-            });
-        }
         const salt = bcryptjs.genSaltSync();
         usuario.password =  bcryptjs.hashSync(password,salt);
         await usuario.save();
@@ -49,11 +42,26 @@ const postUsuarios = async(req, res = response)=> {
     }
   
 }
-const putUsuarios = (req, res = response)=> {
+const putUsuarios = async(req, res = response)=> {
 
+    const {id} = req.params;
+    const {email, password,estado,_id, ...data} = req.body; 
+
+    if(password) {
+        const salt = bcryptjs.genSaltSync();
+
+        data.password = bcryptjs.hashSync(password,salt);
+    }
+    data.updatedAt =  new Date();
+
+    const usuario = await Usuario.findByIdAndUpdate(id, data, {new:true});
+    
+   
 
     res.json({
-        msg:"Usuarios put"
+        ok:true,
+        msg: "Usuario Actualizado Exitosamente",
+        usuario,
     });
 }
 const deleteUsuarios = (req, res = response)=> {
