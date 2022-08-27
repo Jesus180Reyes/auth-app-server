@@ -3,11 +3,20 @@ const Usuario = require("../models/usuario");
 const bcryptjs = require('bcryptjs');
 const { red } = require("colors");
 
-const getUsuarios = (req, res = response)=> {
+const getUsuarios = async(req, res = response)=> {
+    const {limite , desde } = req.query;
+    const query = {estado: true};
+    const [total, usuarios] =  await Promise.all([
+        await Usuario.countDocuments(query),
+        await Usuario.find(query)
+        .skip(Number(desde ))
+        .limit(Number(limite))
 
-
+    ]);
     res.json({
-        msg:"Usuarios get"
+        ok:true,
+        total,
+        usuarios
     });
 }
 const postUsuarios = async(req, res = response)=> {
@@ -33,7 +42,7 @@ const postUsuarios = async(req, res = response)=> {
         
     } catch (error) {
         console.error(red.error);
-       res.status(500).json({
+     return  res.status(500).json({
         ok: false,
         msg:"Hable con el administrador!! " + error
        });
