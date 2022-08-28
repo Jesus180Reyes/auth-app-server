@@ -18,6 +18,11 @@ const UsuarioSchema = Schema({
         default: true,
         required: true,
     },
+    isOnline: {
+        type:Boolean,
+        default:false,  
+    },
+
     createdAt: {
         type: Date,
         default: Date.now(),

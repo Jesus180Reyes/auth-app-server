@@ -28,6 +28,7 @@ router.put('/:id', [
 ], putUsuarios), 
 
 router.delete('/:id', [
+    validarJWT,
     check('id' ,"Id no valido ingresa uno valido").isMongoId(),
     check('id').custom(existeUsuarioPorId),
     validarCampos
