@@ -2,6 +2,7 @@ const { response } = require("express");
 const Usuario = require("../models/usuario");
 const bcryptjs = require('bcryptjs');
 const { red } = require("colors");
+const { generarJWT } = require("../helpers/jwt");
 
 const getUsuarios = async (req, res = response) => {
     const { limite, desde } = req.query;
@@ -27,12 +28,13 @@ const postUsuarios = async (req, res = response) => {
         const usuario = new Usuario({ nombre, email, password });
         const salt = bcryptjs.genSaltSync();
         usuario.password = bcryptjs.hashSync(password, salt);
+        const token = await generarJWT(usuario.id);
         await usuario.save();
-
 
         res.status(201).json({
             ok: true,
             usuario,
+            token
         });
 
     } catch (error) {
@@ -68,13 +70,14 @@ const deleteUsuarios = async (req, res = response) => {
     const { id } = req.params;
 
     const usuario = await Usuario.findByIdAndUpdate(id, { estado: false });
-
+    
     if (!usuario.estado) {
         return res.status(400).json({
             ok: false,
             msg: "El Usuario ya esta baneado"
         });
     }
+    usuario.updatedAt = new Date();
     res.json({
         ok: true,
         usuario,
