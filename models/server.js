@@ -12,7 +12,9 @@ class Server {
         // Path de usuarios
         this.paths = {
             usuarios: '/api/usuarios',
-            auth: '/api/auth/usuarios'
+            auth: '/api/auth/usuarios',
+            trip: '/api/trips',
+            conductores :'/api/conductores',
       
         };
         // this.usuariosPath = '/api/usuarios';
@@ -45,6 +47,8 @@ class Server {
        
         this.app.use(this.paths.usuarios, require('../routes/usuarios'));
         this.app.use(this.paths.auth, require('../routes/auth'));
+        this.app.use(this.paths.conductores, require('../routes/conductores'));
+        this.app.use(this.paths.trip, require('../routes/trip'));
     }
     listen() {
         this.app.listen(this.port, () => {

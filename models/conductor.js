@@ -1,7 +1,7 @@
 const { Schema, model } = require('mongoose');
 const ConductorSchema = Schema({
     rnp:{
-        type: Number,
+        type: String,
         unique: true,
         required:[true, "El RNP es obligatorio"],
 
@@ -9,12 +9,12 @@ const ConductorSchema = Schema({
     nombre: {
         type: String,
         required: [true, 'El Nombre es obligatorio'],
-        unique: true,
+    
     },
     estado: {
         type: Boolean,
         default: true,
-        required: true,
+       
     },
     vehiculo:{
         type:String,
@@ -32,7 +32,7 @@ const ConductorSchema = Schema({
 });
 ConductorSchema.methods.toJSON = function () {
     const { __v,_id, ...data } = this.toObject();
-    data._id = uid;
+    data.uid = _id;
     return data;
 }
 module.exports = model('Conductor', ConductorSchema);
