@@ -4,7 +4,7 @@ const Conductor = require("../models/conductor");
 const Usuario = require("../models/usuario");
 
 
-const validarJWT = async (req = request, res = response, next) => {
+const validarJWTConductores = async (req = request, res = response, next) => {
 
     const token = req.header('x-token');
     if (!token) {
@@ -17,22 +17,22 @@ const validarJWT = async (req = request, res = response, next) => {
 
         const { uid } = jwt.verify(token, process.env.SECRETORPRIVATEKEY);
 
-        const usuario = await Usuario.findById(uid);
+        const conductor = await Conductor.findById(uid);
         
-        if (!usuario) {
+        if (!conductor) {
             return res.status(401).json({
                 msg: 'Token no válido - usuario no existe en la DB'
             });
 
         }
-        if (!usuario.estado) {
+        if (!conductor.estado) {
             return res.status(401).json({
                 msg: 'Token no válido - usuario con estado : false'
             });
 
         }
 
-        req.usuario = usuario;
+        req.usuario = conductor;
 
         next();
 
@@ -52,5 +52,5 @@ const validarJWT = async (req = request, res = response, next) => {
 
 
 module.exports = {
-    validarJWT
+    validarJWTConductores
 }
