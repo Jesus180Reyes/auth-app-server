@@ -6,7 +6,9 @@ const getConductores = async(req,res = response)=> {
     const [total, usuarios] = await Promise.all([
         await Conductor.countDocuments({estado: true}),
          await Conductor.
+        
         find({estado: true})
+        .populate('createdBy', 'nombre email')
         .sort('-isOnline'),
 
     ]);
@@ -17,7 +19,24 @@ const getConductores = async(req,res = response)=> {
     });
    
 }
-const putConductores = async(req = request,res= response)=> {
+const getConductor = async (req, res = response) => {
+    const {rnp} = req.params;
+   
+        const conductor = await Conductor.findOne({rnp, estado:true});
+
+        if(!conductor){
+            return res.status(404).json({
+                ok: false,
+                msg: "El conductor solicitado no existe"
+            });
+        }
+       
+    res.json({
+        ok: true,
+        conductor,
+    });     
+}
+const putConductores = async(req = request,res= response) => {
     const {usuario: optimizadoPor} = req;
     const {id} = req.params;
     const {plate,vehiculo,rnp, _id,estado,isOnline, ...data} = req.body;
@@ -26,7 +45,7 @@ const putConductores = async(req = request,res= response)=> {
     if(!existeConductor){
         return res.status(404).json({
             ok:false,
-            msg: "El Id No existe"+ id,
+            msg: "El Id No existe "+ id,
         });
     } 
     
@@ -46,8 +65,10 @@ const putConductores = async(req = request,res= response)=> {
 const postConductores =async (req,res = response)=> {
 
     try {
+        const {usuario: optimizadoPor} = req;
+        const createdBy = optimizadoPor;
         const {rnp, nombre, vehiculo, plate,} = req.body;
-        const conductor =  new Conductor({rnp,nombre,vehiculo,plate});
+        const conductor =  new Conductor({rnp,nombre,vehiculo,plate,createdBy});
         const existeRnp = await Conductor.findOne({rnp});
         if(existeRnp) {
             return res.status(401).json({
@@ -79,5 +100,6 @@ const postConductores =async (req,res = response)=> {
 module.exports = {
     getConductores,
     postConductores,
-     putConductores
+    putConductores,
+    getConductor
 }
