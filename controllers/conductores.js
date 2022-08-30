@@ -22,7 +22,8 @@ const getConductores = async(req,res = response)=> {
 const getConductor = async (req, res = response) => {
     const {rnp} = req.params;
    
-        const conductor = await Conductor.findOne({rnp, estado:true});
+        const conductor = await Conductor.findOne({rnp, estado:true})
+                                                    .populate('createdBy', 'nombre email');
 
         if(!conductor){
             return res.status(404).json({
