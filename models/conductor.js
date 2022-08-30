@@ -28,6 +28,19 @@ const ConductorSchema = Schema({
         type: Boolean,
         default: false,
     },
+    createdBy: {
+        type: Schema.Types.ObjectId,
+        required:[true, "El CreatedBy es obligatorio"],
+        ref:"Usuario"
+    },
+    createdAt: {
+        type:Date,
+        default:Date.now(),
+    },
+    updatedAt: {
+        type:Date,
+        default: Date.now(),
+    }
    
 });
 ConductorSchema.methods.toJSON = function () {
