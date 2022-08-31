@@ -23,9 +23,9 @@ const getUsuarios = async (req, res = response) => {
 const postUsuarios = async (req, res = response) => {
 
     try {
-        const { nombre, email, password } = req.body;
+        const { nombre, email, password, rnp } = req.body;
 
-        const usuario = new Usuario({ nombre, email, password });
+        const usuario = new Usuario({ nombre, email, password,rnp });
         const salt = bcryptjs.genSaltSync();
         usuario.password = bcryptjs.hashSync(password, salt);
         const token = await generarJWT(usuario.id);

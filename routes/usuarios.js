@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const { check } = require("express-validator");
 const { getUsuarios, postUsuarios, putUsuarios, deleteUsuarios } = require("../controllers/usuarios");
-const { existeUsuarioPorId, existeEmail } = require("../helpers/db-validators");
+const { existeUsuarioPorId, existeEmail, existeRnp } = require("../helpers/db-validators");
 const { validarCampos } = require("../middlewares/validar-campos");
 const { validarJWT } = require("../middlewares/validar-jwt");
 
@@ -12,6 +12,9 @@ router.get('/', [
 ], getUsuarios), 
 
 router.post('/', [
+    check('rnp').custom(existeRnp),
+    check('rnp', "El rnp es obligatorio").not().isEmpty(),
+    check('rnp', "RNP no valido").isLength({min:13,max:13}),
     check('email', "El email es obligatorio").isEmail(),
     check('email').custom(existeEmail),
     check('nombre',"El nombre es obligatorio").not().isEmpty(),

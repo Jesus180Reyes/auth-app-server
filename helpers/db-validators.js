@@ -25,13 +25,21 @@ const existeEmail = async (email)=> {
         throw new Error(`El Correo ${email} ya existe`);
     }
 }
+const existeRnp = async (rnp)=> {
+    const existeRnp = await Usuario.findOne({rnp});
+
+    if(existeRnp){
+        throw new Error(`El RNP ${rnp} ya existe`);
+    }
+}
 
 
 
 module.exports  = {
     existeUsuarioPorId,
     existeEmail,
-    existeTripPorId
+    existeTripPorId,
+    existeRnp
 }
 
  
