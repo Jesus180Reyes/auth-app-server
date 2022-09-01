@@ -52,6 +52,7 @@ class Server {
         this.app.use(this.paths.auth, require('../routes/auth'));
         this.app.use(this.paths.conductores, require('../routes/conductores'));
         this.app.use(this.paths.uploads, require('../routes/upload'));
+        this.app.use(this.paths.trip, require('../routes/trip'));
     }
     listen() {
         this.app.listen(this.port, () => {
