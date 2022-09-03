@@ -26,6 +26,9 @@ const UsuarioSchema = Schema({
         type:Boolean,
         default:false,  
     },
+    img:{
+        type: String,
+    },
 
     createdAt: {
         type: Date,
