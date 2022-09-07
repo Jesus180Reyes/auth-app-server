@@ -3,6 +3,7 @@ const Trip = require('../models/trip');
 const getTrips = async(req, res = response) => {
     const [trip,total] =await  Promise.all([
         await Trip.find()
+        .sort({_id:-1})
         .populate('recibidoPor', 'nombre email')
         .populate('conductor', 'nombre rnp'),
         await Trip.countDocuments(),
