@@ -66,8 +66,8 @@ const putConductores = async(req = request,res= response) => {
 const postConductores =async (req,res = response)=> {
 
     try {
-        const {usuario: optimizadoPor} = req;
-        const createdBy = optimizadoPor;
+        const {id: uid} = req.usuario;
+        const createdBy = uid;
         const {rnp, nombre, vehiculo, plate,} = req.body;
         const conductor =  new Conductor({rnp,nombre,vehiculo,plate,createdBy});
         const existeRnp = await Conductor.findOne({rnp});
